@@ -75,4 +75,11 @@ mod test {
         let my_type: DynSolType = "()[]".parse().unwrap();
         let _ = my_type.abi_decode(&hex::decode("000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000FFFFFFFF").unwrap()).unwrap();
     }
+
+    #[test]
+    fn recursive_dos() {
+        let my_type: DynSolType = "uint256[][][][][][][][][][]".parse().unwrap();
+        let payload = format!("{}{}", "0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000a", "0000000000000000000000000000000000000000000000000000000000000020".repeat(64));
+        let _ = my_type.abi_decode(&hex::decode(payload).unwrap()).unwrap();
+    }
 }
